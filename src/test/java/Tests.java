@@ -1,4 +1,7 @@
-package oefeningen;
+import oefeningen.Book;
+import oefeningen.BookRepository;
+import oefeningen.BookRepositoryBean;
+import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -7,27 +10,26 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class Main {
-    public static void main(String[] args) {
-        // Set up
+public class Tests {
+
+    private EntityManager em;
+
+    @Test
+    public void testOurLogic() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("RealDolmenPersistenceUnit");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
 
-        // Ready to do stuff!
         BookRepository br = new BookRepositoryBean(em);
         List<Book> books = br.findAllBooks();
-        for (Book a : books) {
-            System.out.println(a.getTitle());
-        }
+        assertEquals(4, books.size());
 
-
-        // Tear down
         em.getTransaction().commit();
         em.close();
         emf.close();
     }
 
-
-
 }
+
+
+
